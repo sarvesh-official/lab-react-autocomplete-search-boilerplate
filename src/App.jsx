@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+import { useState } from "react";
+import Countries from "./components/Countries";
+import Data from "../resources/countryData.json";
+export default function App() {
+  const [search, setSearch] = useState("");
+  const testArr = Data.filter((e) => {
+    return e.name.toLowerCase().includes(search.toLowerCase());
+  });
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div
+      id="app"
+      className="w-screen flex justify-center items-center flex-col"
+    >
+      <h1 className="my-6 text-4xl font-bold">Search Bar</h1>
+      <div className="w-auto space-x-3 flex justify-center items-center">
+        <input
+          placeholder="Enter any Country!"
+          type="text"
+          name="search"
+          className="search-box h-11 w-52 rounded-sm"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.code == "Escape") {
+              setSearch("");
+            }
+          }}
+        />
+        <button className="bg-green-200 p-2 rounded-md text-xl">Search</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="data">
+        {search.length == 0
+          ? ""
+          : testArr.map((e) => {
+              return <Countries name={e.name} key={e.code} />;
+            })}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
-
-export default App
